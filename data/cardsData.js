@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
     host: 'localhost',
-    users: 'root',
+    user: 'root',
     password: 'root',
     database: "cardcommerce_db"
 });

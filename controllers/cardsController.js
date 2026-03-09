@@ -1,4 +1,4 @@
-const connection = require("../data/moviesData.js");
+const connection = require("../data/cardsData.js");
 
 
 
