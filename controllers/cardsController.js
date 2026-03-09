@@ -35,7 +35,7 @@ function store(req, res) {
     })
 }
 
-// UPDATE
+// UPDATE di products
 function update(req, res) {
     const {id} = req.params
 
