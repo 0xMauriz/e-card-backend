@@ -1,4 +1,4 @@
-const connection = require('../data/cardsData.js');
+const connection = require("../data/cardsData.js");
 
 function store(req, res) {
 
