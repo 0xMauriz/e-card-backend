@@ -4,11 +4,11 @@ const connection = require("../data/cardsData.js");
 
 function store(req, res) {
 
-    const { productSlug, name, description, price, image, is_featured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionSlug, conditionName } = req.body;
+    const { productSlug, name, description, price, image, isFeatured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionSlug, conditionName } = req.body;
 
     console.log(req.body);
 
-    const sql = 'INSERT INTO `products` ( movie_id, name, vote, text ) VALUES ( ?, ?, ?, ? )'
+    const sql = 'INSERT INTO `products` ( , name, vote, text ) VALUES ( ?, ?, ?, ? )'
 
     connection.query(sql, [movie_id, name, vote, text], (err, results) => {
 
@@ -18,7 +18,6 @@ function store(req, res) {
         res.json({ id: results.insertId });
 
     })
-
 
 }
 
