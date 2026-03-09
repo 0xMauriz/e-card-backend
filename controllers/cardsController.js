@@ -25,15 +25,32 @@ function show(req, res) {
 
 // STORE di products
 function store(req, res) {
-    const {name, slug, description, price, image, is_featured, create_at, updated_at} = req.body;
+    const {name, slug, description, price, image, is_featured} = req.body;
 
-    const sql = 'INSERT INTO `products` (name, slug, description, price, image, is_featured, create_at, updated_at) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )'
+    const sql = 'INSERT INTO `products` (name, slug, description, price, image, is_featured) VALUES ( ?, ?, ?, ?, ?, ? )'
 
-    connection.query(sql, [name, slug, description, price, image, is_featured, create_at, updated_at], (err, results) => {
+    connection.query(sql, [name, slug, description, price, image, is_featured], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully"});
     })
 }
 
+// UPDATE
+function update(req, res) {
+    const {id} = req.params
 
-module.exports = { index, show, store, update, destroy }
+    const {name, slug, description, price, image, is_featured} = req.body;
+
+    const sql = `UPDATE products 
+                SET name = ?, slug = ?, description = ?, price = ?, image = ?, is_featured = ? 
+                WHERE id = ?`;
+    
+    connection.query(sql, [name, slug, description, price, image, is_featured, id], (err, results) => {
+        if (err) return res.status(500).json({ error: "database query failed" });
+        if (results.affectedRows === 0) return res.status(404).json({ message: "Product not found" });
+        res.json({ updated: results.affectedRows, message: "Products updated successfully"});
+    })
+}
+
+
+module.exports = { index, show, store, update}
