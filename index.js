@@ -1,6 +1,14 @@
 const express = require('express');
-const app = express();
+const index = express();
 const cors = require("cors");
 const port = 3000;
 const cardsRouter = require('./routers/cardRouter.js');
 const connection = require("./data/cardsData.js");
+
+index.use(cors());
+index.use(express.json());
+index.use("/products", cardsRouter)
+
+index.listen(port, () => {
+  console.log("Server running on port 3000");
+});
