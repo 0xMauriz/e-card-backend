@@ -23,25 +23,16 @@ function show(req, res) {
     })
 }
 
-// STORE
+// STORE di products
 function store(req, res) {
+    const {name, slug, description, price, image, is_featured, create_at, updated_at} = req.body;
 
-    const { movie_id, name, vote, text } = req.body;
+    const sql = 'INSERT INTO `products` (name, slug, description, price, image, is_featured, create_at, updated_at) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )'
 
-    console.log(req.body);
-
-
-    const sql = 'INSERT INTO `reviews` ( movie_id, name, vote, text ) VALUES ( ?, ?, ?, ? )'
-
-    connection.query(sql, [movie_id, name, vote, text], (err, results) => {
+    connection.query(sql, [name, slug, description, price, image, is_featured, create_at, updated_at], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" });
-        res.status(201);
-        console.log(results);
-        res.json({ id: results.insertId });
-
+        res.status(201).json({ id: results.insertId, message: "Products created successfully"});
     })
-
-
 }
 
 
