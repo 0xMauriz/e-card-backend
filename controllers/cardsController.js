@@ -52,5 +52,17 @@ function update(req, res) {
     })
 }
 
+// DESTROY
+function destroy(req, res) {
+    const {id} = req.params
 
-module.exports = { index, show, store, update}
+    const sql = `DELETE FROM products WHERE id = ?`
+
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: "database query failed" });
+        res.sendStatus(204)
+    });
+}
+
+
+module.exports = { index, show, store, update, destroy}
