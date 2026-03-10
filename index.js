@@ -3,7 +3,6 @@ const index = express();
 const cors = require("cors");
 const port = 3000;
 const cardsRouter = require('./routers/cardRouter.js');
-const connection = require("./data/cardsData.js");
 
 index.use(cors());
 index.use(express.json());

@@ -12,27 +12,29 @@ function index(req, res) {
 
 // SHOW
 function show(req, res) {
-    const { id } = req.params
 
-    const sql = "SELECT * FROM products WHERE id=?"
+    const { productSlug } = req.params
 
-    connection.query(sql, [id], (err, results) => {
+    const sql = "SELECT * FROM products LEFT JOIN order_product ON products.id = order_product.product_id LEFT JOIN orders ON orders.id = order_product.order_id LEFT JOIN `conditions` ON products.id = `conditions`.product_id LEFT JOIN game_type ON products.id = game_type.product_id WHERE products.slug = ?"
+
+    connection.query(sql, [productSlug], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
         if (results.length === 0) return res.status(404).json({ error: "Page not found" })
         res.json(results[0]);
     })
 }
 
-// STORE di products
+// Store
+
 function store(req, res) {
 
     // Query per inserire un order
 
-    const { customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice } = req.body;
+    const { orderSlug, customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice } = req.body;
 
-    const sqlOrder = 'INSERT INTO `orders` (customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, subtotal, shipping_cost, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
+    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, subtotal, shipping_cost, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
 
-    connection.query(sqlOrder, [customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice], (err, results) => {
+    connection.query(sqlOrder, [orderSlug, customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice], (err, results) => {
         if (err) return res.status(500).json({ error: "Database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully" })
     })
