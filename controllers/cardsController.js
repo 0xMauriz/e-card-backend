@@ -40,11 +40,11 @@ function store(req, res) {
     // Query per inserire prodotto
 
 
-    const { productSlug, name, description, price, image, isFeatured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionsSlug, conditionsName } = req.body;
+    const { productSlug, name, description, price, image, isFeatured, gameTypeProductId, gameTypeSlug, gameTypeName, rarityProductId, raritySlug, rarityName, conditionsProductId, conditionsSlug, conditionsName } = req.body;
 
     const sqlProduct = 'INSERT INTO `products` (slug, name, description, price, image, is_featured) VALUES ( ?, ?, ?, ?, ?, ? )'
 
-    connection.query(sqlProduct, [slug, name, description, price, image, isFeatured], (err, results) => {
+    connection.query(sqlProduct, [productSlug, name, description, price, image, isFeatured], (err, results) => {
 
         if (err) return res.status(500).json({ error: "database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully" });
@@ -53,11 +53,25 @@ function store(req, res) {
 
     // Query per inserire le condizioni dell'oggetto
 
-    const sqlConditions = ''
+    const sqlConditions = 'INSERT INTO `conditions` (product_id, slug, name) VALUES ( ?, ?, ?)'
+
+    connection.query(sqlConditions, [conditionsProductId, conditionsSlug, conditionsName], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        res.status(201).json({ id: results.insertId, message: "Condition created succesfully" })
+    })
 
     // Query per inserire il nome del gioco di carte collezionabili a cui la carta appartiene
 
-    const sqlGameType = ''
+    const sqlGameType = 'INSERT INTO `game_type` ( product_id, slug, name) VALUES ( ?, ?, ?)'
+
+    connection.query(sqlGameType, [gameTypeProductId, gameTypeSlug, gameTypeName], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        res.status(201).json({ id: results.insertId, message: "Condition created succesfully" })
+    })
+
+    // Query per inserire la rarità della carta
+
+    const sqlRarity = 'INSERT INTO `rarity` ( product_id, slug, name) VALUES ( ?, ?, ?)'
 
 }
 
