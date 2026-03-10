@@ -73,7 +73,13 @@ function store(req, res) {
 
     const sqlRarity = 'INSERT INTO `rarity` ( product_id, slug, name) VALUES ( ?, ?, ?)'
 
+    connection.query(sqlRarity, [rarityProductId, raritySlug, rarityName], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        res.status(201).json({ id: results.insertId, message: "Condition created succesfully" })
+    })
+
 }
+
 
 // UPDATE di products
 function update(req, res) {
