@@ -2,7 +2,7 @@ const connection = require("../data/cardsData.js");
 
 // INDEX
 function index(req, res) {
-    const sql = "SELECT * FROM products"
+    const sql = "SELECT * FROM `products`"
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
@@ -26,13 +26,29 @@ function show(req, res) {
 // STORE di products
 function store(req, res) {
 
+    // Query per inserire un order
+
+    const { customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice } = req.body;
+
+    const sqlOrder = 'INSERT INTO `orders` (customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, subtotal, shipping_cost, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
+
+    connection.query(sqlOrder, [customerName, customerSurame, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, subtotal, shippingCost, totalPrice], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        res.status(201).json({ id: results.insertId, message: "Products created successfully" })
+    })
+
+    // Query per inserire prodotto
+
+
     const { productSlug, name, description, price, image, isFeatured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionSlug, conditionName } = req.body;
 
-    const sql = 'INSERT INTO `products` (name, slug, description, price, image, is_featured) VALUES ( ?, ?, ?, ?, ?, ? )'
+    const sqlProduct = 'INSERT INTO `products` (slug, name, description, price, image, is_featured) VALUES ( ?, ?, ?, ?, ?, ? )'
 
-    connection.query(sql, [name, slug, description, price, image, is_featured], (err, results) => {
+    connection.query(sqlProduct, [slug, name, description, price, image, isFeatured], (err, results) => {
+
         if (err) return res.status(500).json({ error: "database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully" });
+
     })
 }
 
