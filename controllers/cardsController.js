@@ -77,6 +77,7 @@ function store(req, res) {
 
 // UPDATE di products
 function update(req, res) {
+
     const { id } = req.params
 
     const { name, slug, description, price, image, is_featured } = req.body;
