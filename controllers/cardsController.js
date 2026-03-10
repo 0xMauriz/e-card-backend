@@ -40,7 +40,7 @@ function store(req, res) {
     // Query per inserire prodotto
 
 
-    const { productSlug, name, description, price, image, isFeatured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionSlug, conditionName } = req.body;
+    const { productSlug, name, description, price, image, isFeatured, gameTypeSlug, gameTypeName, raritySlug, rarityName, conditionsSlug, conditionsName } = req.body;
 
     const sqlProduct = 'INSERT INTO `products` (slug, name, description, price, image, is_featured) VALUES ( ?, ?, ?, ?, ?, ? )'
 
@@ -50,6 +50,15 @@ function store(req, res) {
         res.status(201).json({ id: results.insertId, message: "Products created successfully" });
 
     })
+
+    // Query per inserire le condizioni dell'oggetto
+
+    const sqlConditions = ''
+
+    // Query per inserire il nome del gioco di carte collezionabili a cui la carta appartiene
+
+    const sqlGameType = ''
+
 }
 
 // UPDATE di products
