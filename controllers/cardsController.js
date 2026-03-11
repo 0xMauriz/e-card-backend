@@ -15,7 +15,7 @@ function show(req, res) {
 
     const { productSlug } = req.params
 
-    const sql = "SELECT * FROM products LEFT JOIN conditions ON products.id = conditions.product_id LEFT JOIN game_type ON products.id = game_type.product_id LEFT JOIN rarity ON products.id = rarity.product_id WHERE products.slug = ?"
+    const sql = "SELECT * FROM products WHERE products.slug = ?"
 
     connection.query(sql, [productSlug], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
