@@ -6,7 +6,7 @@ const cardsRouter = require('./routers/cardRouter.js');
 
 index.use(cors());
 index.use(express.json());
-index.use("/products", cardsRouter)
+index.use("/", cardsRouter)
 
 index.listen(port, () => {
   console.log("Server running on port 3000");
