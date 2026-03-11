@@ -15,13 +15,14 @@ function show(req, res) {
 
     const { productSlug } = req.params
 
-    const sql = "SELECT * FROM products LEFT JOIN order_product ON products.id = order_product.product_id LEFT JOIN orders ON orders.id = order_product.order_id LEFT JOIN conditions ON products.id = conditions.product_id LEFT JOIN game_type ON products.id = game_type.product_id LEFT JOIN rarity ON products.id = rarity.product_id WHERE products.slug = ?"
+    const sql = "SELECT * FROM products LEFT JOIN conditions ON products.id = conditions.product_id LEFT JOIN game_type ON products.id = game_type.product_id LEFT JOIN rarity ON products.id = rarity.product_id WHERE products.slug = ?"
 
     connection.query(sql, [productSlug], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
         if (results.length === 0) return res.status(404).json({ error: "Page not found" })
         res.json(results[0]);
     })
+
 }
 
 // Store
