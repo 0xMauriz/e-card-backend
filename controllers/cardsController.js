@@ -25,6 +25,32 @@ function show(req, res) {
 
 }
 
+function orderIndex(req, res) {
+
+    const sqlShowOrder = "SELECT * FROM  `orders`";
+
+    connection.query(sqlShowOrder, (err, results) => {
+        if (err) return res.status(500).json({ error: "database query failed" })
+        if (results.length === 0) return res.status(404).json({ error: "Page not found" })
+        res.json(results[0]);
+    })
+
+}
+
+function orderShow(req, res) {
+
+    const { orderSlug } = req.params;
+
+    const sqlShowOrder = "SELECT * FROM `orders` WHERE `orders`.`slug` = ( ? )"
+
+    connection.query(sqlShowOrder, [orderSlug], (err, results) => {
+        if (err) return res.status(500).json({ error: "database query failed" })
+        if (results.length === 0) return res.status(404).json({ error: "Page not found" })
+        res.json(results[0]);
+    })
+
+}
+
 // Store
 
 function orderStore(req, res) {
@@ -74,4 +100,4 @@ function destroy(req, res) {
 }
 
 
-module.exports = { index, show, orderStore, update, destroy }
+module.exports = { index, show, orderIndex, orderShow, orderStore, update, destroy }
