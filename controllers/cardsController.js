@@ -60,7 +60,7 @@ function orderStore(req, res) {
 
     const { orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost } = req.body;
 
-    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
+    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
 
     connection.query(sqlOrder, [orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost], (err, results) => {
         if (err) return res.status(500).json({ error: "Database query failed" });
