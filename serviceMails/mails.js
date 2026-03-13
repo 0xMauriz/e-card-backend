@@ -10,6 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function inviaEmailConferma(clienteEmail, ordineId) {
+  // mail conferma ordine al cliente
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: clienteEmail,
@@ -21,9 +22,25 @@ async function inviaEmailConferma(clienteEmail, ordineId) {
     `
   };
 
+  // mail conferma ordine al venditore
+  const mailAdmin = {
+    from: process.env.EMAIL_USER,
+    to: process.env.ADMIN_EMAIL,
+    subject: "Nuovo ordine ricevuto",
+    html: `
+      <h2>Nuovo ordine ricevuto</h2>
+      <p>ID ordine: <b>${ordineId}</b></p>
+      <p>Email cliente: ${clienteEmail}</p>
+    `
+  };
+
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Email inviata a", clienteEmail);
+    await transporter.sendMail(mailAdmin);
+
+    console.log("email cliente inviata a:", clienteEmail)
+    console.log("email venditore inviata a:", process.env.ADMIN_EMAIL)
+    
   } catch (err) {
     console.error("Errore invio email:", err);
   }
