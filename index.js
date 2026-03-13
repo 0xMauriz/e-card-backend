@@ -18,19 +18,39 @@ index.use("/", cardsRouter)
 
 // gestione mails
 index.post("/order", async (req, res) => {
-  const emailCliente = req.body.email;
-  if (!emailCliente) {
-    return res.status(400).json({ error: "Email cliente mancante" });
+
+  const { order, products } = req.body;
+
+  if (!order.customerMail) {
+    return res.status(400).json({
+      error: "Email cliente mancante"
+    });
   }
 
   const ordineId = Math.floor(Math.random() * 100000000);
 
   try {
-    await inviaEmailConferma(emailCliente, ordineId);
-    res.json({ message: "Ordine ricevuto e email inviata!" });
+
+    await inviaEmailConferma(
+      order.customerMail,
+      ordineId,
+      order,
+      products
+    );
+
+    res.json({
+      message: "Ordine ricevuto e email inviata!",
+      ordineId: ordineId
+    });
+
   } catch (err) {
+
     console.error("Errore invio email:", err);
-    res.status(500).json({ error: "Errore nell'invio email" });
+
+    res.status(500).json({
+      error: "Errore nell'invio email"
+    });
+
   }
 });
 
