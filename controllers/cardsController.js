@@ -60,9 +60,24 @@ function orderStore(req, res) {
 
     const { orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost } = req.body;
 
-    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
+    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
 
     connection.query(sqlOrder, [orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        res.status(201).json({ id: results.insertId, message: "Products created successfully" })
+    })
+
+}
+
+function orderProductStore(req, res) {
+
+    // Query per inserire un order
+
+    const { orderId, productId, unitQuantity, unitPrice } = req.body;
+
+    const sqlOrder = 'INSERT INTO `order_product` ( order_id, product_id, unit_quantity, unit_price ) VALUES ( ?, ?, ?, ? )'
+
+    connection.query(sqlOrder, [orderId, productId, unitQuantity, unitPrice], (err, results) => {
         if (err) return res.status(500).json({ error: "Database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully" })
     })
@@ -101,4 +116,4 @@ function destroy(req, res) {
 }
 
 
-module.exports = { index, show, orderIndex, orderShow, orderStore, update, destroy }
+module.exports = { index, show, orderIndex, orderShow, orderStore, orderProductStore, update, destroy }
