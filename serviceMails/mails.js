@@ -1,17 +1,28 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS
+//   }
+// });
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.MAILTRAP_HOST,
+  port: Number(process.env.MAILTRAP_PORT),
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.MAILTRAP_USER,
+    pass: process.env.MAILTRAP_PASS
   }
 });
 
+console.log("EMAIL FUNCTION PARTITA");
+
 async function inviaEmailConferma(clienteEmail, ordineId, order, products) {
   // riepilogo dati dell'ordine prodotto
-  const datiProdotti = products.map(p => `
+  const datiProdotti = (products || []).map(p => `
       <tr>
         <td>${p.title}</td>
         <td>${p.quantity}</td>
@@ -25,7 +36,7 @@ async function inviaEmailConferma(clienteEmail, ordineId, order, products) {
   }, 0);
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: "shop@test.com",
     to: clienteEmail,
     subject: "Conferma ordine",
     html: `
@@ -74,7 +85,7 @@ async function inviaEmailConferma(clienteEmail, ordineId, order, products) {
 
   // mail conferma ordine al venditore
   const mailAdmin = {
-    from: process.env.EMAIL_USER,
+    from: "shop@test.com",
     to: process.env.ADMIN_EMAIL,
     subject: "Nuovo ordine ricevuto",
     html: `
