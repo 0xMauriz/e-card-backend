@@ -18,6 +18,7 @@ index.use("/", cardsRouter)
 
 // gestione mails
 index.post("/order", async (req, res) => {
+  console.log("BODY RICEVUTO:", req.body);
 
   const { order, products } = req.body;
 
