@@ -40,7 +40,7 @@ async function inviaEmailConferma(clienteEmail, ordineId) {
 
     console.log("email cliente inviata a:", clienteEmail)
     console.log("email venditore inviata a:", process.env.ADMIN_EMAIL)
-    
+
   } catch (err) {
     console.error("Errore invio email:", err);
   }
