@@ -76,7 +76,7 @@ async function inviaEmailConferma(clienteEmail, ordineId, order, products) {
         </div>
 
         <div class="order-total">
-          <h3>Totale ordine: ${totaleOrdine} €</h3>
+          <h3>Totale ordine: ${totaleOrdine.toFixed(2)} €</h3>
         </div>
 
       </div>
