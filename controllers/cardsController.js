@@ -28,7 +28,7 @@ function show(req, res) {
 
     const { productSlug } = req.params
 
-    const sql = "SELECT * FROM products LEFT JOIN conditions ON products.id = conditions.product_id LEFT JOIN game_type ON products.id = game_type.product_id LEFT JOIN game_rarity ON products.id = game_rarity.product_id WHERE products.slug = ?"
+    const sql = "SELECT * FROM products WHERE products.slug = ?"
 
     connection.query(sql, [productSlug], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
@@ -40,16 +40,15 @@ function show(req, res) {
 
 function orderShow(req, res) {
 
-    const { orderSlug } = req.params;
+    const { id } = req.params;
 
-    const sqlShowOrder = "SELECT * FROM `orders` WHERE `orders`.`slug` = ( ? )"
+    const sqlShowOrder = "SELECT * FROM `orders` WHERE `orders`.`id` = ?"
 
-    connection.query(sqlShowOrder, [orderSlug], (err, results) => {
+    connection.query(sqlShowOrder, [id], (err, results) => {
         if (err) return res.status(500).json({ error: "database query failed" })
         if (results.length === 0) return res.status(404).json({ error: "Page not found" })
         res.json(results[0]);
     })
-
 }
 
 // Store
@@ -58,11 +57,11 @@ function orderStore(req, res) {
 
     // Query per inserire un order
 
-    const { orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost } = req.body;
+    const { customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost } = req.body;
 
-    const sqlOrder = 'INSERT INTO `orders` ( slug, customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
+    const sqlOrder = 'INSERT INTO `orders` ( customer_name, customer_surname, customer_mail, phone, street_name, street_name_billing, city, city_billing, postal_code, postal_code_billing, province, province_billing, country, country_billing, shipping_cost ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )'
 
-    connection.query(sqlOrder, [orderSlug, customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost], (err, results) => {
+    connection.query(sqlOrder, [customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost], (err, results) => {
         if (err) return res.status(500).json({ error: "Database query failed" });
         res.status(201).json({ id: results.insertId, message: "Products created successfully" })
     })
@@ -103,6 +102,24 @@ function update(req, res) {
     })
 }
 
+function orderUpdate(req, res) {
+
+    const { id } = req.params
+
+    const { orderSlug } = req.body;
+
+    const sql = `UPDATE orders
+    SET slug = ?
+    WHERE id = ?`
+
+    connection.query(sql, [orderSlug, id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" });
+        if (results.affectedRows === 0) return res.status(404).json({ error: "Ordine non trovato" })
+        res.json({ updated: results.affectedRows })
+    })
+
+}
+
 // DESTROY
 function destroy(req, res) {
     const { id } = req.params
@@ -116,4 +133,4 @@ function destroy(req, res) {
 }
 
 
-module.exports = { index, show, orderIndex, orderShow, orderStore, orderProductStore, update, destroy }
+module.exports = { index, show, orderIndex, orderShow, orderStore, orderProductStore, update, orderUpdate, destroy }
