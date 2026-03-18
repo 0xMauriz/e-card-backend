@@ -56,6 +56,7 @@ function orderShow(req, res) {
 function orderStore(req, res) {
 
     // Query per inserire un order
+    console.log("BODY ORDINE:", req.body);
 
     const { customerName, customerSurname, customerMail, phone, streetName, streetNameBilling, city, cityBilling, postalCode, postalCodeBilling, province, provinceBilling, country, countryBilling, shippingCost } = req.body;
 
